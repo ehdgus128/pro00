@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring5.mypro00.mapper.MyMemberMapper">
+
+	<!-- 특정 아이디 회원 조회: 회원 권한도 함께 조회됨 -->
+	<resultMap id="authorityMap" type="com.spring5.mypro00.domain.MyAuthorityVO">
+		<result property="userId" column="userId"/>
+		<result property="authority" column="authority"/>
+		<result property="grantedDate" column="grantedDate"/>
+	</resultMap>
+	<resultMap id="memberMap" type="com.spring5.mypro00.domain.MyMemberVO">
+		<result property="userId" column="userId"/>
+		<result property="userPw" column="userPw"/>
+		<result property="userName" column="userName"/>
+		<result property="mregDate" column="mregDate"/>
+		<result property="mmodDate" column="mmodDate"/>
+		<result property="mdropFlg" column="mdropFlg"/>
+		<result property="enabled" column="enabled"/>
+		<collection property="authorityList" resultMap="authorityMap"/>
+	</resultMap>
+	<select id="selectMyMember" resultMap="memberMap">
+		SELECT m.userId, m.userPw, m.userName, m.mregDate, m.mmodDate, m.mdropFlg, m.enabled,
+		       a.authority, a.grantedDate
+		FROM book_ex.tbl_mymember m LEFT OUTER JOIN 
+		     book_ex.tbl_myAuthoritys a
+		     ON m.userId = a.userId
+		WHERE m.userId = #{userId}
+	</select>
+	
+	
+	<!-- 회원 등록: 회원 등록 시 권한 추가도 같이 수행 -->
+	<insert id="insertMyMember" parameterType="com.spring5.mypro00.domain.MyAuthorityVO">
+		INSERT INTO book_ex.tbl_mymember
+		VALUES(#{userId}, #{userPw}, #{userName}, DEFAULT, DEFAULT, DEFAULT, DEFAULT)
+	</insert>
+	<insert id="insertMyAuthority">
+		INSERT INTO book_ex.tbl_myAuthoritys
+		VALUES(#{userId}, #{authority}, DEFAULT)
+	</insert>
+	
+	
+</mapper>

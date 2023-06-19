@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.4.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 사용자 password 암호화 처리 빈: BCrypt 방식 암호화 -->
+	<bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+	<!-- 승인/인증을 위해 필요한 데이터를 가져오는 빈(UserDetailsService 타입의 빈) -->
+	<bean id="myMemberUserDetailsServiceImpl" class="com.spring5.mypro00.common.security.MyMemberUserDetailsServiceImpl"/>
+
+	<!-- 로그인 성공 시의 처리 로직이 정의된 클래스의 빈 등록 --><!-- 
+	<bean id="myLoginSuccessHandler" class="com.spring5.mypro00.common.security.MyLoginSuccessHandler"/> -->
+	<bean id="myLoginSuccessHandler" class="com.spring5.mypro00.common.security.MyLoginSuccessHandler2"/>
+	
+	<!-- AccessDeniedHandler 구현클래스 빈 -->
+	<bean id="myAccessDeniedHandler" class="com.spring5.mypro00.common.security.MyAccessDeniedHandler"/>
+	
+	<security:http>
+	<!-- 
+		<security:csrf disabled="true"/> -->
+	
+		<security:intercept-url pattern="/myboard/list" access="permitAll"/>
+		<security:intercept-url pattern="/myboard/detail" access="permitAll"/>
+		<!-- MyBoardController 클래스의 등록메서드 위에 @PreAuthorize("isAuthenticated()") 어노테이션 추가로 대체
+		<security:intercept-url method="GET" pattern="/myboard/register" access="isAuthenticated()" />
+		<security:intercept-url method="POST" pattern="/myboard/register" access="isAuthenticated()" /> -->
+		
+		<!-- 요청 URL에 대한 권한 설정 --><!-- 
+		<security:intercept-url pattern="/" access="permitAll"/>
+		<security:intercept-url pattern="/myboard/list" access="hasAnyAuthority('ROLE_MEMBER', 'ROLE_USER')"/>
+		<security:intercept-url pattern="/myboard/list" access="hasAuthority('ROLE_MEMBER')"/>
+		<security:intercept-url pattern="/myboard/register" access="isAuthenticated()"/>
+		<security:intercept-url pattern="/myboard/modify" access="hasAuthority('ROLE_ADMIN')"/> -->
+		<!-- 로그인 된 상태에서는 로그인이나 회원가입 화면에 접근 못하도록 함 --><!-- 
+		<security:form-login login-page="/myLogin" login-processing-url="/myLoginProcess"/> -->
+		<security:form-login login-page="/login" 
+							 login-processing-url="/login"
+							 default-target-url="/"
+							 authentication-success-handler-ref="myLoginSuccessHandler"/>
+		
+		<security:logout logout-url="/myLogoutProcess" 
+						 logout-success-url="/"/>
+						 
+		<!-- 스프링 시큐리티 자동로그인: 1주일 유지 -->
+		<security:remember-me data-source-ref="dataSource"
+							  remember-me-parameter="myrememberMe"
+							  token-validity-seconds="604800"/>
+		<!-- 
+		<security:access-denied-handler error-page="/accessForbiddenError"/> -->
+		<security:access-denied-handler ref="myAccessDeniedHandler"/>
+	
+	</security:http>
+	
+	<security:authentication-manager>
+		<security:authentication-provider user-service-ref="myMemberUserDetailsServiceImpl">
+			<security:password-encoder ref="bCryptPasswordEncoder"/>
+		</security:authentication-provider>
+	</security:authentication-manager>
+</beans>
