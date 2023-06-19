@@ -14,7 +14,7 @@
 		<org.slf4j-version>2.0.7</org.slf4j-version><!-- 1.6.6 ->2.0.7 -->
 	</properties>
 	<dependencies>
-	
+	<!-- Git fetch Test -->
 	<!-- 새로추가: spring-security-core 5.4.11 -->
 		<dependency>
 		    <groupId>org.springframework.security</groupId>
