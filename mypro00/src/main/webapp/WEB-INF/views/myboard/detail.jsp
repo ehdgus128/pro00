@@ -901,6 +901,9 @@ $(".chat").on("click", "li.commentLi .btnModCmt", function(){
 			var _pageNum = frmCmtPagingValue.find("input[name='pageNum']").val();
 			
 			showCmtList(_pageNum) ;
+		},
+		function(err){
+			alert("작성자만 수정 가능합니다.") ;
 		}
 	
 	);

@@ -1,5 +1,8 @@
 package com.spring5.mypro00.service;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
+import java.io.Console;
 import java.util.HashMap;
 import java.util.List;
 
@@ -107,7 +110,8 @@ public class MyBoardServiceImpl implements MyBoardService {
 		
 		boolean boardModifyResult = myBoardMapper.updateMyBoard(board) == 1 ;
 		
-		if (boardModifyResult && (board.getAttachFileList().size() > 0)) {
+		
+		if (boardModifyResult && (board.getAttachFileList() != null)) {
 			
 			board.getAttachFileList().forEach(
 					attachFile -> {

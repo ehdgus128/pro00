@@ -3,12 +3,11 @@ package com.spring5.mypro00.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -128,7 +127,8 @@ public class MyReplyController {
 	
 	//게시물에 대한 특정 댓글/답글 삭제 요청: 블라인드 처리 시에도 사용될 수 있습니다.
 	@PreAuthorize("isAuthenticated() && principal.username == #myReply.rwriter")
-	@PatchMapping( value = "/{bno}/{rno}" ,
+	@PutMapping( value = "/{bno}/{rno}:dF=1" ,
+				   consumes = "application/json;charset=utf-8",
 				   produces = "text/plain;charset=utf-8")
 	public ResponseEntity<String> modifyRdelFlag( @PathVariable("bno") Long bno, 
 												  @PathVariable("rno") Long rno,

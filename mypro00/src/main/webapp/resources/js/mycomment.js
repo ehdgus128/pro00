@@ -168,10 +168,11 @@ var myCommentClsr = ( function() {
 		var rwriter = cmtReply.rwriter ;
 		
 		$.ajax({
-			type: "patch" ,
-			url: "/mypro00/replies/" + bno + "/" + rno ,
+			type: "put" ,
+			url: "/mypro00/replies/" + bno + "/" + rno + ":dF=1",
+			data: JSON.stringify(cmtReply) ,
+			contentType: "application/json; charset=utf-8" ,
 			dataType: "text",
-			data: cmtReply ,
 			success: function(result, status, xhr){  
 				if(callback){
 					callback(result) ;

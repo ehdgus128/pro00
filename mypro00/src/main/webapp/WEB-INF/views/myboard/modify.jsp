@@ -59,6 +59,9 @@
 	<input type='hidden' name='rowAmountPerPage' id="rowAmountPerPage" value='${myBoardPaging.rowAmountPerPage}'>
 	<input type='hidden' name='scope' value='${myBoardPaging.scope}'>
 	<input type='hidden' name='keyword' value='${myBoardPaging.keyword}'>
+	
+	<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
+
 </form>
 
                 </div><!-- /.panel-body -->
@@ -281,6 +284,9 @@ $(".uploadDiv").on("change", "input#inputFile" , function(){
 		contentType: false , //contentType에 MIME 타입을 지정하지 않음.
 		processData: false , //contentType에 설정된 형식으로 data를 처리하지 않음.
 		dataType: "json" ,
+		beforeSend: function(xhr){
+			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}") ;
+		},
 		success: function(uploadResult){
 			console.log(uploadResult) ;
 			

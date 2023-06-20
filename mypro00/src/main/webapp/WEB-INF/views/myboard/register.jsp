@@ -46,11 +46,11 @@
 	<button type="button" class="btn btn-primary" id="btnRegister" onclick="sendBoard();">등록</button>
 	<button type="button" class="btn btn-warning" data-oper="list"
 	        onclick="location.href='${contextPath}/myboard/list'">취소</button>
-<%-- 
-	<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }"> --%>
+
+	<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
 	
-	<!-- talib설정이 되어있으면 위의 주석처리한 input 대신 사용가능 -->
-	<sec:csrfInput/>
+	<!-- talib설정이 되어있으면 위의 주석처리한 input 대신 사용가능 --><%-- 
+	<sec:csrfInput/> --%>
 	
 </form>
                   
